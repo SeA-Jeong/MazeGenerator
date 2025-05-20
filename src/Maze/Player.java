@@ -1,7 +1,7 @@
 package Maze;
 import Maze.MazeGenerator;
 
-public class MazeTest {
+public class Player {
     public static void main(String[] args) {
         MazeGenerator maze = new MazeGenerator(15);  // 미로 크기 설정
         maze.generateMaze();                         // 미로 생성

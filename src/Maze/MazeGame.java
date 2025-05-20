@@ -1,6 +1,6 @@
 package Maze;
 
-public class Main {
+public class MazeGame {
     public static void main(String[] args) {
         MazeGenerator mazeGenerator = new MazeGenerator(30);
         mazeGenerator.generateMaze();
