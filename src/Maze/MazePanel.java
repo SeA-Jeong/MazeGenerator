@@ -77,10 +77,9 @@ public class MazePanel extends JPanel {
     }
 
     private void updateBackground() {
-        String shape = MazeAnalyzer.getShape(maze, player.getX(), player.getY());
-        backgroundImage = new ImageIcon("assets/" + shape + ".png").getImage();
+        backgroundImage = ImageUtil.getBackgroundImage(maze, player.getX(), player.getY());
     }
-
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
