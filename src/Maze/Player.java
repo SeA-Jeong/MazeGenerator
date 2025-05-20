@@ -1,16 +1,43 @@
 package Maze;
 public class Player {
-    int x, y;
-    Direction facing;
+    private int x, y;
+    private Direction direction;
 
-    public Player(int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.facing = Direction.NORTH;
+    public Player(int startX, int startY) {
+        this.x = startX;
+        this.y = startY;
+        this.direction = Direction.UP;  // 기본 방향
     }
 
-    public void move(int dx, int dy) {
-        this.x += dx;
-        this.y += dy;
+    // 현재 위치
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public Direction getDirection() { return direction; }
+
+    // 방향 설정
+    public void setDirection(Direction dir) {
+        this.direction = dir;
+    }
+
+    // 현재 방향으로 한 칸 이동
+    public void moveForward() {
+        int[] delta = direction.toDelta();
+        x += delta[0];
+        y += delta[1];
+    }
+
+    // 지정된 방향으로 이동
+    public void move(Direction dir) {
+        this.direction = dir;
+        int[] delta = dir.toDelta();
+        x += delta[0];
+        y += delta[1];
+    }
+
+    // 위치 초기화
+    public void setPosition(int newX, int newY) {
+        this.x = newX;
+        this.y = newY;
     }
 }
+
