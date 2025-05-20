@@ -2,10 +2,12 @@ package Maze;
 
 public class MazeGame {
     public static void main(String[] args) {
-        MazeGenerator mazeGenerator = new MazeGenerator(30);
-        mazeGenerator.generateMaze();
+        JFrame frame = new JFrame("Maze Explorer");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 800);
 
-        System.out.println("RAW MAZE\n" + mazeGenerator.getRawMaze());
-        System.out.println("SYMBOLIC MAZE\n" + mazeGenerator.getSymbolicMaze());
+        MazePanel panel = new MazePanel();
+        frame.add(panel);
+        frame.setVisible(true);
     }
 }

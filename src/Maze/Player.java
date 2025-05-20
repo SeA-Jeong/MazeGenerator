@@ -1,12 +1,16 @@
 package Maze;
-import Maze.MazeGenerator;
-
 public class Player {
-    public static void main(String[] args) {
-        MazeGenerator maze = new MazeGenerator(15);  // 미로 크기 설정
-        maze.generateMaze();                         // 미로 생성
+    int x, y;
+    Direction facing;
 
-        System.out.println(maze.getRawMaze());       // 숫자 배열 출력
-        System.out.println(maze.getSymbolicMaze());  // 심볼 미로 출력
+    public Player(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.facing = Direction.NORTH;
+    }
+
+    public void move(int dx, int dy) {
+        this.x += dx;
+        this.y += dy;
     }
 }
