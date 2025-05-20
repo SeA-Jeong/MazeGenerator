@@ -1,5 +1,6 @@
 package Maze;
 import javax.swing.*;
+import Maze.ImageUtil;
 import java.awt.*;
 
 public class MazePanel extends JPanel {
@@ -20,8 +21,8 @@ public class MazePanel extends JPanel {
     }
 
     private void setupArrowLabels() {
-        ImageIcon baseIcon = new ImageIcon("assets/arrow.png");
-        ImageIcon hoverIcon = new ImageIcon("assets/arrow_active.png");
+    	ImageIcon baseIcon = new ImageIcon(getClass().getResource("/Maze/MazeImage/arrow.png"));
+    	ImageIcon hoverIcon = new ImageIcon(getClass().getResource("/Maze/MazeImage/arrow_active.png"));
 
         arrowUp = new ArrowLabel(
             ImageUtil.rotateImage(baseIcon, -90),
@@ -61,6 +62,7 @@ public class MazePanel extends JPanel {
         add(arrowLeft);
         add(arrowRight);
     }
+
 
     private void move(Direction dir) {
         int[] d = dir.toDelta();

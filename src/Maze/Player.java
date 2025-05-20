@@ -1,5 +1,10 @@
 package Maze;
+import java.util.Deque;
+import java.util.ArrayDeque;
+import java.awt.Point;
+
 public class Player {
+    private Deque<Point> moveHistory = new ArrayDeque<>();
     private int x, y;
     private Direction direction;
 
@@ -9,35 +14,32 @@ public class Player {
         this.direction = Direction.UP;  // 기본 방향
     }
 
-    // 현재 위치
     public int getX() { return x; }
     public int getY() { return y; }
     public Direction getDirection() { return direction; }
 
-    // 방향 설정
     public void setDirection(Direction dir) {
         this.direction = dir;
     }
 
-    // 현재 방향으로 한 칸 이동
-    public void moveForward() {
-        int[] delta = direction.toDelta();
-        x += delta[0];
-        y += delta[1];
-    }
-
-    // 지정된 방향으로 이동
     public void move(Direction dir) {
         this.direction = dir;
+        moveHistory.push(new Point(x, y));  // 이동 전 위치 저장
         int[] delta = dir.toDelta();
         x += delta[0];
         y += delta[1];
     }
 
-    // 위치 초기화
+    public void undo() {
+        if (!moveHistory.isEmpty()) {
+            Point prev = moveHistory.pop();
+            this.x = prev.x;
+            this.y = prev.y;
+        }
+    }
+
     public void setPosition(int newX, int newY) {
         this.x = newX;
         this.y = newY;
     }
 }
-

@@ -3,15 +3,16 @@ package Maze;
 import java.util.*;
 
 public class MazeGenerator {
-
+    private int width;
+    private int height;
     private int[][] maze;
-    private int dimension;
     private Stack<Node> stack = new Stack<>();
     private Random rand = new Random();
 
-    public MazeGenerator(int dim) {
-        this.dimension = dim;
-        this.maze = new int[dim][dim];
+    public MazeGenerator(int width, int height) {
+        this.width = width;
+        this.height = height;
+        maze = new int[height][width];
     }
 
     public void generateMaze() {
@@ -29,14 +30,14 @@ public class MazeGenerator {
 
         // 입구/출구 보장
         maze[0][0] = 1;
-        maze[dimension - 1][dimension - 1] = 1;
+        maze[height - 1][width - 1] = 1;
     }
 
     private boolean isValid(Node node) {
         if (!inBounds(node.x, node.y) || maze[node.y][node.x] == 1) return false;
 
         int count = 0;
-        for (int[] dir : new int[][]{{0,-1},{0,1},{-1,0},{1,0}}) {
+        for (int[] dir : new int[][]{{0, -1}, {0, 1}, {-1, 0}, {1, 0}}) {
             int nx = node.x + dir[0];
             int ny = node.y + dir[1];
             if (inBounds(nx, ny) && maze[ny][nx] == 1) {
@@ -48,7 +49,7 @@ public class MazeGenerator {
 
     private List<Node> getNeighbors(Node node) {
         List<Node> list = new ArrayList<>();
-        int[][] dirs = {{0,-1},{0,1},{-1,0},{1,0}};
+        int[][] dirs = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
         for (int[] d : dirs) {
             int nx = node.x + d[0];
             int ny = node.y + d[1];
@@ -60,7 +61,7 @@ public class MazeGenerator {
     }
 
     private boolean inBounds(int x, int y) {
-        return x >= 0 && y >= 0 && x < dimension && y < dimension;
+        return x >= 0 && y >= 0 && x < width && y < height;
     }
 
     public String getSymbolicMaze() {
@@ -74,11 +75,10 @@ public class MazeGenerator {
         return sb.toString();
     }
 
-    // ✅ 문자 미로 반환 (분석용)
     public char[][] getCharMaze() {
-        char[][] result = new char[dimension][dimension];
-        for (int y = 0; y < dimension; y++) {
-            for (int x = 0; x < dimension; x++) {
+        char[][] result = new char[height][width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 result[y][x] = maze[y][x] == 1 ? '□' : '■';
             }
         }
