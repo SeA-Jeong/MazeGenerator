@@ -12,23 +12,36 @@ public class MazeGame extends JFrame {
         setSize(800, 800);
 
         // 미로 생성
-        MazeGenerator generator = new MazeGenerator(10, 10);
-        generator.generateMaze(); // 실제 미로 생성
-        char[][] mazeData = generator.getCharMaze(); // 문자형 미로 반환
+        MazeGenerator generator = new MazeGenerator(10, 10); // 10x10 크기
+        generator.generateMaze();
+        char[][] mazeData = generator.getCharMaze();
 
-        // 플레이어 초기 위치
-        Player player = new Player(0, 0);
+        // 유효한 시작 위치 찾기 (가장 위쪽의 '□')
+        Player player = null;
+        outer:
+        for (int y = 0; y < mazeData.length; y++) {
+            for (int x = 0; x < mazeData[0].length; x++) {
+                if (mazeData[y][x] == '□') {
+                    player = new Player(x, y);
+                    break outer;
+                }
+            }
+        }
 
-        // MazePanel은 char[][]를 받음
+        if (player == null) {
+            throw new IllegalStateException("유효한 시작 위치를 찾을 수 없습니다.");
+        }
+
+        // MazePanel 생성 및 등록
         MazePanel mazePanel = new MazePanel(mazeData, player);
         add(mazePanel);
 
-        // m 키로 전체 맵 보기 토글
+        // 키 입력 리스너 등록
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == 'm') {
-                    mazePanel.toggleFullView(); // 반드시 MazePanel에 구현 필요
+                    mazePanel.toggleFullView();
                 }
             }
         });
