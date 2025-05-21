@@ -6,62 +6,51 @@ public class MazeGenerator {
     private int width;
     private int height;
     private int[][] maze;
-    private Stack<Node> stack = new Stack<>();
     private Random rand = new Random();
 
     public MazeGenerator(int width, int height) {
         this.width = width;
         this.height = height;
         maze = new int[height][width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                maze[y][x] = 0; // 전부 벽으로 초기화
+            }
+        }
     }
 
     public void generateMaze() {
-        stack.push(new Node(0, 0));
+        boolean[][] visited = new boolean[height][width];
+        dfs(1, 1, visited); // (1,1)에서 시작하도록 수정
 
-        while (!stack.isEmpty()) {
-            Node current = stack.pop();
-            if (isValid(current)) {
-                maze[current.y][current.x] = 1;
-                List<Node> neighbors = getNeighbors(current);
-                Collections.shuffle(neighbors);
-                stack.addAll(neighbors);
-            }
-        }
-
-        // 입구/출구 보장
-        maze[0][0] = 1;
-        maze[height - 1][width - 1] = 1;
+        // 입구/출구 하나씩만 생성
+        maze[1][0] = 1; // 좌측 벽에 입구
+        maze[height - 2][width - 1] = 1; // 우측 벽에 출구
     }
 
-    private boolean isValid(Node node) {
-        if (!inBounds(node.x, node.y) || maze[node.y][node.x] == 1) return false;
+    private void dfs(int x, int y, boolean[][] visited) {
+        visited[y][x] = true;
+        maze[y][x] = 1;
 
-        int count = 0;
-        for (int[] dir : new int[][]{{0, -1}, {0, 1}, {-1, 0}, {1, 0}}) {
-            int nx = node.x + dir[0];
-            int ny = node.y + dir[1];
-            if (inBounds(nx, ny) && maze[ny][nx] == 1) {
-                count++;
+        int[][] directions = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+        List<int[]> dirList = Arrays.asList(directions);
+        Collections.shuffle(dirList, rand);
+
+        for (int[] dir : dirList) {
+            int nx = x + dir[0] * 2;
+            int ny = y + dir[1] * 2;
+
+            if (inBounds(nx, ny) && !visited[ny][nx]) {
+                int betweenX = x + dir[0];
+                int betweenY = y + dir[1];
+                maze[betweenY][betweenX] = 1;
+                dfs(nx, ny, visited);
             }
         }
-        return count < 2;
-    }
-
-    private List<Node> getNeighbors(Node node) {
-        List<Node> list = new ArrayList<>();
-        int[][] dirs = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
-        for (int[] d : dirs) {
-            int nx = node.x + d[0];
-            int ny = node.y + d[1];
-            if (inBounds(nx, ny)) {
-                list.add(new Node(nx, ny));
-            }
-        }
-        return list;
     }
 
     private boolean inBounds(int x, int y) {
-        return x >= 0 && y >= 0 && x < width && y < height;
+        return x > 0 && y > 0 && x < width - 1 && y < height - 1;
     }
 
     public String getSymbolicMaze() {
@@ -84,13 +73,4 @@ public class MazeGenerator {
         }
         return result;
     }
-
-    // 내부 Node 클래스
-    private static class Node {
-        int x, y;
-        Node(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-}
+} 
