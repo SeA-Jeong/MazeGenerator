@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.net.URL;
+import java.io.File;
 import java.util.Map;
 
 public class ImageUtil {
@@ -17,27 +17,32 @@ public class ImageUtil {
         "corner_upleft", "right.png",
         "cross", "+.png",
         "straight_vertical", "up.png"
-        // 필요한 경우 여기에 더 추가
     );
 
-    /**
-     * 미로의 (x, y) 위치에 해당하는 배경 이미지를 반환
-     */
-    public static Image getBackgroundImage(char[][] maze, int x, int y) {
-        String shape = MazeAnalyzer.getShape(maze, x, y);
-        String imageFile = shapeToImageMap.getOrDefault(shape, "deadend.png"); // 기본 fallback
+    private static final String BASE_PATH = "C:/HSJ/OpenSouceProject/src/Maze/MazeImage/";
 
-        URL url = ImageUtil.class.getResource("/Maze/MazeImage/" + imageFile);
-        if (url == null) {
-            System.err.println("⚠ 이미지 파일을 찾을 수 없습니다: " + imageFile);
+    // 방향 정보 포함 버전
+    public static Image getBackgroundImage(char[][] maze, int x, int y, Direction dir) {
+        String shape = MazeAnalyzer.getShape(maze, x, y);
+        String imageFile = shapeToImageMap.getOrDefault(shape, "deadend.png");
+
+        File file = new File(BASE_PATH + imageFile);
+        if (!file.exists()) {
+            System.err.println("⚠ 이미지 파일을 찾을 수 없습니다: " + file.getAbsolutePath());
             return null;
         }
-        return new ImageIcon(url).getImage();
+
+        ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+        double angle = switch (dir) {
+            case UP -> 0;
+            case RIGHT -> 90;
+            case DOWN -> 180;
+            case LEFT -> 270;
+        };
+
+        return rotateImage(icon, angle).getImage();
     }
 
-    /**
-     * 아이콘 회전 (이미지 버튼 등에서 사용)
-     */
     public static ImageIcon rotateImage(ImageIcon icon, double angleDegrees) {
         if (icon == null || icon.getImage() == null || icon.getIconWidth() <= 0 || icon.getIconHeight() <= 0) {
             System.err.println("⚠ 잘못된 이미지 아이콘입니다. 회전 생략");
@@ -60,4 +65,4 @@ public class ImageUtil {
 
         return new ImageIcon(rotated);
     }
-}
+} 

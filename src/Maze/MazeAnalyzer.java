@@ -1,4 +1,5 @@
 package Maze;
+
 public class MazeAnalyzer {
 
     public static String getShape(char[][] maze, int x, int y) {
@@ -12,7 +13,7 @@ public class MazeAnalyzer {
 
         int count = (up ? 1 : 0) + (down ? 1 : 0) + (left ? 1 : 0) + (right ? 1 : 0);
 
-        // 경우별 판단
+        // 형태 판별
         if (count == 4) return "cross";
 
         if (count == 3) {
@@ -25,10 +26,10 @@ public class MazeAnalyzer {
         if (count == 2) {
             if (up && down) return "straight_vertical";
             if (left && right) return "straight_horizontal";
-            if (up && right) return "corner_upleft";
-            if (up && left) return "corner_upright";
-            if (down && right) return "corner_downleft";
-            if (down && left) return "corner_downright";
+            if (up && right) return "corner_upright";
+            if (up && left) return "corner_upleft";
+            if (down && right) return "corner_downright";
+            if (down && left) return "corner_downleft";
         }
 
         if (count == 1) {
@@ -38,10 +39,11 @@ public class MazeAnalyzer {
             return "deadend_right";
         }
 
-        return "wall";
+        return "isolated"; // 길이 없으면
     }
 
     private static boolean isPath(char[][] maze, int x, int y) {
-        return x >= 0 && y >= 0 && y < maze.length && x < maze[0].length && maze[y][x] == '□';
+        if (x < 0 || y < 0 || y >= maze.length || x >= maze[0].length) return false;
+        return maze[y][x] == '□';
     }
 }

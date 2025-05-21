@@ -1,4 +1,5 @@
 package Maze;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -30,7 +31,7 @@ public class ArrowLabel extends JLabel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                onClickAction.run(); // 클릭 시 동작 실행
+                onClickAction.run();
             }
         });
     }
